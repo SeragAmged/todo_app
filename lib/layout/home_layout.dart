@@ -1,4 +1,3 @@
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,6 +98,8 @@ class HomeLayout extends StatelessWidget {
                                     showTimePicker(
                                       context: context,
                                       initialTime: TimeOfDay.now(),
+                                      initialEntryMode:
+                                          TimePickerEntryMode.input,
                                     ).then(
                                       (time) {
                                         timeController.text =
@@ -130,6 +131,7 @@ class HomeLayout extends StatelessWidget {
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime.now(),
                                         lastDate: DateTime.parse('2023-12-31'),
+                                        helpText: "new Text",
                                       );
                                       dateController.text =
                                           DateFormat.yMMMd().format(date!);
