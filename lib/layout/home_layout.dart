@@ -131,7 +131,6 @@ class HomeLayout extends StatelessWidget {
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime.now(),
                                         lastDate: DateTime.parse('2023-12-31'),
-                                        helpText: "new Text",
                                       );
                                       dateController.text =
                                           DateFormat.yMMMd().format(date!);
