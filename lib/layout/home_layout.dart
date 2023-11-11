@@ -2,19 +2,21 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/shared/cubit/cubit.dart';
-import 'package:todo_app/shared/cubit/states.dart';
+
+import '../shared/cubit/cubit.dart';
+import '../shared/cubit/states.dart';
 import '../shared/components/components.dart';
 
 class HomeLayout extends StatelessWidget {
   HomeLayout({super.key});
 
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  var taskController = TextEditingController();
-  var timeController = TextEditingController();
-  var dateController = TextEditingController();
+  final TextEditingController taskController = TextEditingController();
+  final TextEditingController taskEmojiController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class HomeLayout extends StatelessWidget {
           return Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-              title: Text(cubit.titles[cubit.currentIndex]),
+              title: Center(child: Text(cubit.titles[cubit.currentIndex])),
             ),
             body: ConditionalBuilder(
               condition: false, //cubit.tasks.isEmpty,
@@ -41,25 +43,30 @@ class HomeLayout extends StatelessWidget {
               fallback: ((context) => cubit.screens[cubit.currentIndex]),
             ),
             floatingActionButton: FloatingActionButton(
-              child: Icon(cubit.fabIcon),
+              child: Icon(
+                cubit.fabIcon,
+                color: Colors.white,
+              ),
               onPressed: () {
                 if (cubit.isBottomSheetShown) {
                   if (formKey.currentState!.validate()) {
                     cubit
                         .insertToDatabase(
+                      emoji: taskEmojiController.text,
                       title: taskController.text,
                       date: dateController.text,
                       time: timeController.text,
                     )
                         .then(
                       (value) {
-                        taskController.text = '';
-                        dateController.text = '';
-                        timeController.text = '';
+                        taskController.clear();
+                        taskEmojiController.clear();
+                        dateController.clear();
+                        timeController.clear();
                       },
                     ).catchError(
                       (error) {
-                        print("an error occurred: $error");
+                        debugPrint("an error occurred: $error");
                       },
                     );
                   }
@@ -68,21 +75,42 @@ class HomeLayout extends StatelessWidget {
                       .showBottomSheet(
                         elevation: 20.0,
                         (context) => Container(
-                          color: Colors.grey[200],
+                          color: Colors.grey.shade300,
                           padding: const EdgeInsets.all(15.0),
                           child: Form(
                             key: formKey,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                defaultFormField(
-                                  title: 'Task',
-                                  controller: taskController,
-                                  prefix: const Icon(Icons.title_outlined),
-                                  type: TextInputType.text,
-                                  validated: (value) => value.isEmpty
-                                      ? "Task can't be empty"
-                                      : null,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: defaultFormField(
+                                        title: 'Task emoji',
+                                        controller: taskEmojiController,
+                                        prefix: const Icon(
+                                          Icons.emoji_emotions_outlined,
+                                        ),
+                                        type: TextInputType.text,
+                                        validated: (value) => (value.isEmpty)
+                                            ? "Task Emoji must be one emoji"
+                                            : null,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Expanded(
+                                      child: defaultFormField(
+                                        title: 'Task',
+                                        controller: taskController,
+                                        prefix:
+                                            const Icon(Icons.title_outlined),
+                                        type: TextInputType.text,
+                                        validated: (value) => value.isEmpty
+                                            ? "Task can't be empty"
+                                            : null,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 20.0,
@@ -154,7 +182,7 @@ class HomeLayout extends StatelessWidget {
                     },
                   ).catchError(
                     (error) {
-                      print("an error occurred: $error");
+                      debugPrint("an error occurred: $error");
                     },
                   );
 
@@ -187,4 +215,3 @@ class HomeLayout extends StatelessWidget {
     );
   }
 }
-//tasks

@@ -16,10 +16,10 @@ class ArchivedTasksScreen extends StatelessWidget {
         var tasks = AppCubit.get(context).archivedTasks;
         return ConditionalBuilder(
           condition: tasks.isEmpty,
-          builder: (context) => Center(
+          builder: (context) => const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(
                   Icons.task,
                   color: Colors.black26,
@@ -38,19 +38,12 @@ class ArchivedTasksScreen extends StatelessWidget {
           ),
           fallback: (context) => ListView.separated(
             itemBuilder: (context, index) => buildTaskItem(
-              tasks: tasks[index],
               context: context,
+              tasks: tasks[index],
+              showArchiveIcon: false,
+              showDoneIcon: false,
             ),
-            separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey[300],
-              ),
-            ),
+            separatorBuilder: (context, index) => const SizedBox(height: 20),
             itemCount: tasks.length,
           ),
         );

@@ -26,6 +26,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppChangeNavBarState());
   }
 
+
   late Database database;
   List<Map> newTasks = [];
   List<Map> doneTasks = [];
@@ -37,15 +38,15 @@ class AppCubit extends Cubit<AppStates> {
       version: 1,
       onCreate: (db, version) async {
         await db.execute(
-            'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT,time TEXT ,status TEXT)');
-        print('Data base created');
+            'CREATE TABLE tasks (id INTEGER PRIMARY KEY, emoji TEXT, title TEXT, date TEXT, time TEXT,status TEXT)');
+        debugPrint('Data base created');
       },
       onOpen: (database) {
         getAllDatabase(database);
       },
     ).then(
       (value) {
-        print('Data base opened');
+        debugPrint('Data base opened');
         database = value;
         emit(AppCreateDatabaseState());
       },
@@ -53,6 +54,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future insertToDatabase({
+    required String emoji,
     required String title,
     required String date,
     required String time,
@@ -61,11 +63,11 @@ class AppCubit extends Cubit<AppStates> {
       (Transaction txn) async {
         txn
             .rawInsert(
-          'INSERT INTO tasks(title, date, time,status) VALUES("$title",  "$date", "$time", "new")',
+          'INSERT INTO tasks(emoji, title, date, time, status) VALUES("$emoji", "$title",  "$date", "$time", "new")',
         )
             .then(
           (value) {
-            print('row number $value inserted');
+            debugPrint('row number $value inserted');
             emit(AppInsertDatabaseState());
             getAllDatabase(database);
           },
@@ -80,7 +82,6 @@ class AppCubit extends Cubit<AppStates> {
     archivedTasks = [];
     database.rawQuery('Select * FROM tasks').then(
       (values) {
-
         values.forEach(
           (element) {
             if (element['status'] == 'new') {
