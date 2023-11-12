@@ -1,16 +1,42 @@
 # todo_app
 
-A new Flutter project.
+todo_app is a simple Flutter application that allows users to Track their tasks and bowse them in simple minimal design
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- minimal design
+- add time date and emoji for task
+- mark tasks as:
+  - new
+  - done
+  - archived
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<br>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/SeragAmged/todo_app.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd todo-app
+```
+
+3. Install the required dependencies:
+
+```bash
+flutter pub get
+```
+
+4. Run the app on an emulator or connected device:
+
+```bash
+flutter run
+```
